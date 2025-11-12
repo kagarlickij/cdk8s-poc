@@ -1,0 +1,13 @@
+namespace: hello-prod
+services:
+  hello-go:
+    image:
+      tag: "0.2.2"
+    args:
+      - "--text"
+      - "Hello from prod"
+    replicas: 2
+  hello-java:
+    image:
+      tag: "10.1.28-jdk17-temurin"
+    replicas: 2

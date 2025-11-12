@@ -1,0 +1,13 @@
+namespace: hello-dev
+services:
+  hello-go:
+    image:
+      tag: "0.2.3"
+    args:
+      - "--text"
+      - "Hello from dev"
+    replicas: 1
+  hello-java:
+    image:
+      tag: "10.1.29-jdk17-temurin"
+    replicas: 1
