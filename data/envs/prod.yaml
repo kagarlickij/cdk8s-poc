@@ -1,13 +1,9 @@
-namespace: hello-prod
 services:
   hello-go:
     image:
-      tag: "0.2.2"
-    args:
-      - "--text"
-      - "Hello from prod"
+      tag: "1.27.4-alpine"
     replicas: 2
   hello-java:
     image:
-      tag: "10.1.28-jdk17-temurin"
+      tag: "1.27.2-alpine"
     replicas: 2

@@ -1,4 +1,4 @@
-from cdk8s import ApiObject
+from cdk8s import ApiObject, JsonPatch
 
 def create_java_worker(chart, cfg):
     labels = {
@@ -6,17 +6,20 @@ def create_java_worker(chart, cfg):
         "app.kubernetes.io/component": "java-worker",
     }
 
-    ApiObject(
+    deployment = ApiObject(
         chart,
         f"{cfg['name']}-deployment",
-        {
-            "apiVersion": "apps/v1",
-            "kind": "Deployment",
-            "metadata": {
-                "name": cfg["name"],
-                "labels": labels,
-            },
-            "spec": {
+        api_version="apps/v1",
+        kind="Deployment",
+        metadata={
+            "name": cfg["name"],
+            "labels": labels,
+        },
+    )
+    deployment.add_json_patch(
+        JsonPatch.add(
+            "/spec",
+            {
                 "replicas": cfg.get("replicas", 1),
                 "selector": {"matchLabels": labels},
                 "template": {
@@ -50,20 +53,23 @@ def create_java_worker(chart, cfg):
                     },
                 },
             },
-        },
+        )
     )
 
-    ApiObject(
+    service = ApiObject(
         chart,
         f"{cfg['name']}-service",
-        {
-            "apiVersion": "v1",
-            "kind": "Service",
-            "metadata": {
-                "name": cfg["name"],
-                "labels": labels,
-            },
-            "spec": {
+        api_version="v1",
+        kind="Service",
+        metadata={
+            "name": cfg["name"],
+            "labels": labels,
+        },
+    )
+    service.add_json_patch(
+        JsonPatch.add(
+            "/spec",
+            {
                 "type": cfg.get("service", {}).get("type", "ClusterIP"),
                 "selector": labels,
                 "ports": [
@@ -74,5 +80,5 @@ def create_java_worker(chart, cfg):
                     }
                 ],
             },
-        },
+        )
     )

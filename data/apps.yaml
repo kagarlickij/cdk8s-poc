@@ -2,21 +2,18 @@ services:
   - name: hello-go
     runtime: go-worker
     image:
-      repository: hashicorp/http-echo
+      repository: nginx
       tag: latest
-    containerPort: 5678
-    args:
-      - "--text"
-      - "Hello from Go"
+    containerPort: 80
     service:
       port: 80
-      targetPort: 5678
+      targetPort: 80
   - name: hello-java
     runtime: java-worker
     image:
-      repository: tomcat
+      repository: nginx
       tag: latest
-    containerPort: 8080
+    containerPort: 80
     service:
-      port: 8080
-      targetPort: 8080
+      port: 80
+      targetPort: 80
